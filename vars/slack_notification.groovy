@@ -1,9 +1,17 @@
 
+#!/usr/bin/env groovy
+
 def call(String buildResult) {
   if ( buildResult == "SUCCESS" ) {
-    slackSend color: "good", message: "Build deployed successfully - JOB(${env.JOB_NAME}) BUILD#${env.BUILD_NUMBER} link:${env.BUILD_URL} ${currentBuild.getBuildCauses()[0].userName}"
+    slackSend color: "good", message: "Job: ${env.JOB_NAME} with buildnumber ${env.BUILD_NUMBER} was successful"
   }
   else if( buildResult == "FAILURE" ) { 
-     slackSend failOnError:true ,color : "danger" ,message: "Build failed  - JOB(${env.JOB_NAME}) BUILD#${env.BUILD_NUMBER} link:${env.BUILD_URL} ${currentBuild.getBuildCauses()[0].userName}"
+    slackSend color: "danger", message: "Job: ${env.JOB_NAME} with buildnumber ${env.BUILD_NUMBER} was failed"
+  }
+  else if( buildResult == "UNSTABLE" ) { 
+    slackSend color: "warning", message: "Job: ${env.JOB_NAME} with buildnumber ${env.BUILD_NUMBER} was unstable"
+  }
+  else {
+    slackSend color: "danger", message: "Job: ${env.JOB_NAME} with buildnumber ${env.BUILD_NUMBER} its resulat was unclear"	
   }
 }
